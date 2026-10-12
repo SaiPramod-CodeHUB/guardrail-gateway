@@ -1,0 +1,23 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: guardrail-gateway
+  ai:
+    model:
+      chat: ${LLM_PROVIDER:none}     # "anthropic" puts a real model behind the gateway; "none" = simulated vulnerable agent
+      embedding: none
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY:not-set}
+      chat:
+        options:
+          model: ${ANTHROPIC_MODEL:claude-sonnet-5-5}
+          max-tokens: 1200
+          temperature: 0.0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics

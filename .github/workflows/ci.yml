@@ -1,0 +1,20 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Unit tests + red-team gate (runs every attack on every change)
+        run: mvn -B verify
+      - name: Eval report
+        run: mvn -B -q compile exec:java && cat eval/results/results.md >> "$GITHUB_STEP_SUMMARY"
